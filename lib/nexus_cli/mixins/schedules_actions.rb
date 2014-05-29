@@ -4,9 +4,9 @@ module NexusCli
   # @author Miguel Ferreira <mferreira@schubergphilis.com>
   module SchedulesActions
 
-    def create_scheduled_task(name, type_id, enabled, alert_email,  properties, schedule)
-      json = create_scheduled_task_json(name, type_id, enabled, alert_email, properties, schedule)
-      response = nexus.post(nexus_url(get_rest_api_endpoint()), :body => json, :header => DEFAULT_CONTENT_TYPE_HEADER)
+    def create_scheduled_task(name, type_id, enabled, alert_email, schedule, properties)
+      json = create_scheduled_task_json(name, type_id, enabled, alert_email, schedule, properties)
+      response = nexus.post(nexus_url(get_schedules_api_endpoint), :body => json, :header => DEFAULT_CONTENT_TYPE_HEADER)
       case response.status
         when 201
           return true
@@ -17,19 +17,36 @@ module NexusCli
       end
     end
 
-    def get_rest_api_endpoint()
-      "/service/local/schedules"
+    def get_schedules
+      json = get_schedules_json
+      response = nexus.get(nexus_url(get_schedules_api_endpoint), :body => json, :header => DEFAULT_ACCEPT_HEADER)
+      case response.status
+        when 200
+          return response.content
+        when 400
+          raise GetSchedulesTaskException.new(response.content)
+        else
+          raise UnexpectedStatusCodeException.new(response.status)
+      end
     end
 
-    def create_scheduled_task_json(name, type_id, enabled, alert_email,  properties, schedule)
+    def get_schedules_api_endpoint
+      '/service/local/schedules'
+    end
+
+    def create_scheduled_task_json(name, type_id, enabled, alert_email, schedule, properties)
       params = {}
       params[:typeId] = type_id
       params[:enabled] = enabled
       params[:alertEmail] = alert_email
       params[:name] = name
-      params[:properties] = properties.map { |x| {"scheduled-task-property" => x} }
+      params[:properties] = properties.map { |x| {'scheduled-task-property' => x} }
       params[:schedule] = schedule
       JSON.dump(:data => params)
+    end
+
+    def get_schedules_json
+      JSON.dump({})
     end
 
     private

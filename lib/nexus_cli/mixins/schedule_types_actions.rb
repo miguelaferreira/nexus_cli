@@ -4,12 +4,13 @@ module NexusCli
   # @author Miguel Ferreira <mferreira@schubergphilis.com>
   module ScheduleTypesActions
 
-    def list_schedule_types
+    def get_schedule_types
       json = list_schedule_types_json
-      response = nexus.get(nexus_url(get_rest_api_endpoint()), :body => json, :header => DEFAULT_ACCEPT_HEADER)
+      response = nexus.get(nexus_url(get_schedule_types_api_endpoint), :body => json, :header => DEFAULT_ACCEPT_HEADER)
       case response.status
         when 200
-          return parse_list_schedule_type_response(response.content)
+          # return parse_list_schedule_type_response(response.content)
+          return response.content
         when 400
           raise ListScheduleTypesException.new(response.content)
         else
@@ -17,7 +18,7 @@ module NexusCli
       end
     end
 
-    def get_rest_api_endpoint
+    def get_schedule_types_api_endpoint
       '/service/local/schedule_types'
     end
 

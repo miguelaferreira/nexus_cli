@@ -12,24 +12,32 @@ end
 describe NexusCli::SchedulesActions do
   let(:dummy_instance) { (Class.new { include NexusCli::SchedulesActions }).new }
   
-  describe "get_rest_api_endpoint" do
-    it "returns the correct REST endpoint" do
-      dummy_instance.get_rest_api_endpoint.should be_a(String)
-      dummy_instance.get_rest_api_endpoint.should eql('/service/local/schedules')
+  describe 'get_schedules_api_endpoint' do
+    it 'returns the correct REST endpoint' do
+      rest_endpoint = dummy_instance.get_schedules_api_endpoint
+      rest_endpoint.should be_a(String)
+      rest_endpoint.should include('schedules')
     end
   end
   
-  describe "create_scheduled_task_json" do
-    it "should contain specified fields" do
-      json = dummy_instance.create_scheduled_task_json('name', 'type id', true, 'email address',  [{:key => 'key1', :value => 'value1'}], 'tomorrow')
+  describe 'create_scheduled_task_json' do
+    it 'should contain specified fields' do
+      json = dummy_instance.create_scheduled_task_json('name', 'type id', true, 'email address',
+                                                       'tomorrow',  [{:key => 'key1', :value => 'value1'}])
 
       json.should include("\"data\":")
       json.should include("\"typeId\":\"type id\"")
       json.should include("\"enabled\":true")
       json.should include("\"alertEmail\":\"email address\"")
       json.should include("\"name\":\"name\"")
-      json.should include("\"properties\":[{\"scheduled-task-property\":{\"key\":\"key1\",\"value\":\"value1\"}}]")
       json.should include("\"schedule\":\"tomorrow\"")
+      json.should include("\"properties\":[{\"scheduled-task-property\":{\"key\":\"key1\",\"value\":\"value1\"}}]")
+    end
+  end
+
+  describe 'get_schedules' do
+    it 'should contain no fields' do
+      dummy_instance.get_schedules_json.should eql('{}')
     end
   end
 
@@ -41,7 +49,8 @@ describe NexusCli::SchedulesActions do
           'username' => 'admin',
           'password' => 'admin123'
       )
-      remote.create_scheduled_task('name', 'type id', true, 'email address',  [{:key => 'key1', :value => 'value1'}], 'tomorrow').should eql(true)
+      remote.create_scheduled_task('name', 'type id', true, 'email address',
+                                   'tomorrow', [{:key => 'key1', :value => 'value1'}]).should eql(true)
     end
   end
 

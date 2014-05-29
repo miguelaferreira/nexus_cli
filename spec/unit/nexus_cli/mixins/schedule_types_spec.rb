@@ -45,19 +45,19 @@ describe NexusCli::Field do
     @field = NexusCli::Field.new('label', true, 'type')
   end
 
-  it "should have a label" do
+  it 'should have a label' do
     @field.label.should eql('label')
   end
 
-  it "should be required" do
+  it 'should be required' do
     @field.is_required.should eql(true)
   end
 
-  it "should have a type" do
+  it 'should have a type' do
     @field.type.should eql('type')
   end
 
-  it "should be parseable from a JSON object" do
+  it 'should be parseable from a JSON object' do
     json_text = '
     {
       "id": "repositoryId",

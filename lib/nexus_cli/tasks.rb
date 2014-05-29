@@ -438,24 +438,22 @@ module NexusCli
           say nexus_remote.get_artifact_download_url(coordinates), :green
         end
 
+        desc "get_schedules", "Gets a list with all scheduled tasks"
+        def get_schedules
+          say JSON.pretty_generate(JSON.parse(nexus_remote.get_schedules)), :green
+        end
+
         desc "create_scheduled_task", "Creates a scheduled task"
         def create_scheduled_task(name)
-          if nexus_remote.create_scheduled_task(name, options[:id], options[:enabled], options[:alert_email], options[:properties], options[:schedule])
+          if nexus_remote.create_scheduled_task(name, options[:enabled], options[:alert_email],
+                                                options[:properties], options[:schedule])
             say "A new Scheduled Task named #{name} has been created.", :blue
           end
         end
 
-        desc "list_schedule_types", "Lists available schedule types"
-        def list_schedule_types()
-          schedule_types = nexus_remote.list_schedule_types()
-          if schedule_types.any?
-            say "Found #{schedule_types.length} schedule types.\n", :blue
-            schedule_types.each do |schedule_type|
-              say schedule_type.to_s + "\n", :blue
-            end
-          else
-            say "No schedule types available", :red
-          end
+        desc "get_schedule_types", "Lists available schedule types"
+        def get_schedule_types
+          say JSON.pretty_generate(JSON.parse(nexus_remote.get_schedule_types)), :green
         end
 
         private

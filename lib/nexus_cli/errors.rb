@@ -269,6 +269,18 @@ The output from the server was:
     status_code(129)
   end
 
+  class GetSchedulesTaskException < NexusCliError
+    def initialize(body)
+      @server_response = JSON.pretty_generate(JSON.parse(body))
+    end
+
+    def message
+      %{Your get schedules command failed due to the following:
+#{@server_response}}
+    end
+    status_code(130)
+  end
+
   class ListScheduleTypesException < NexusCliError
     def initialize(body)
       @server_response = JSON.pretty_generate(JSON.parse(body))

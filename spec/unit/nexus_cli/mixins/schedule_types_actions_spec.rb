@@ -354,20 +354,21 @@ end
 describe NexusCli::ScheduleTypesActions do
   let(:dummy_instance) { (Class.new { include NexusCli::ScheduleTypesActions }).new }
 
-  describe 'get_rest_api_endpoint' do
+  describe 'get_schedule_types_api_endpoint' do
     it 'returns the correct REST endpoint' do
-      dummy_instance.get_rest_api_endpoint.should be_a(String)
-      dummy_instance.get_rest_api_endpoint.should eql('/service/local/schedule_types')
+      rest_endpoint = dummy_instance.get_schedule_types_api_endpoint
+      rest_endpoint.should be_a(String)
+      rest_endpoint.should include('schedule_types')
     end
   end
 
-  describe 'list_schedule_types_json' do
+  describe 'get_schedule_types_json' do
     it 'should have no fields' do
       dummy_instance.list_schedule_types_json.should include("\"data\":{}")
     end
   end
 
-  describe 'list_scheduled_types' do
+  describe 'get_scheduled_types' do
     it 'should produce a list of types' do
       remote = NexusCli::OSSRemote.new(
           'url' => 'http://localhost:8081/nexus',
@@ -375,7 +376,8 @@ describe NexusCli::ScheduleTypesActions do
           'username' => 'admin',
           'password' => 'admin123'
       )
-      remote.list_schedule_types.should_not be_empty
+
+      remote.get_schedule_types.should_not be_empty
     end
   end
 
