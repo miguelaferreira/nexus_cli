@@ -244,7 +244,7 @@ The output from the server was:
     end
     status_code(127)
   end
-  
+
   class NexusHTTP404 < NexusCliError
     def initialize(body)
       @server_response = body
@@ -255,5 +255,29 @@ The output from the server was:
 #{@server_response}}
     end
     status_code(128)
+  end
+
+  class CreateScheduledTaskException < NexusCliError
+    def initialize(body)
+      @server_response = JSON.pretty_generate(JSON.parse(body))
+    end
+
+    def message
+      %{Your create scheduled task command failed due to the following:
+#{@server_response}}
+    end
+    status_code(129)
+  end
+
+  class ListScheduleTypesException < NexusCliError
+    def initialize(body)
+      @server_response = JSON.pretty_generate(JSON.parse(body))
+    end
+
+    def message
+      %{Your list schedule types command failed due to the following:
+#{@server_response}}
+    end
+    status_code(129)
   end
 end

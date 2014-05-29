@@ -29,6 +29,10 @@ module NexusCli
   autoload :UserActions, 'nexus_cli/mixins/user_actions'
   autoload :RepositoryActions, 'nexus_cli/mixins/repository_actions'
   autoload :LoggingActions, 'nexus_cli/mixins/logging_actions'
+  autoload :SchedulesActions, 'nexus_cli/mixins/schedules_actions'
+  autoload :ScheduleTypesActions, 'nexus_cli/mixins/schedule_types_actions'
+  autoload :ScheduleType, 'nexus_cli/mixins/schedule_type'
+  autoload :Field, 'nexus_cli/mixins/schedule_type'
   autoload :CustomMetadataActions, 'nexus_cli/mixins/pro/custom_metadata_actions'
   autoload :SmartProxyActions, 'nexus_cli/mixins/pro/smart_proxy_actions'
 
