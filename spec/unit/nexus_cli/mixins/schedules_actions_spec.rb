@@ -22,8 +22,7 @@ describe NexusCli::SchedulesActions do
   
   describe 'create_scheduled_task_json' do
     it 'should contain specified fields' do
-      json = dummy_instance.create_scheduled_task_json('name', 'type id', true, 'email address',
-                                                       'tomorrow',  [{:key => 'key1', :value => 'value1'}])
+      json = dummy_instance.create_scheduled_task_json('name', 'type id', true, 'email address', 'tomorrow')
 
       json.should include("\"data\":")
       json.should include("\"typeId\":\"type id\"")
@@ -31,7 +30,6 @@ describe NexusCli::SchedulesActions do
       json.should include("\"alertEmail\":\"email address\"")
       json.should include("\"name\":\"name\"")
       json.should include("\"schedule\":\"tomorrow\"")
-      json.should include("\"properties\":[{\"scheduled-task-property\":{\"key\":\"key1\",\"value\":\"value1\"}}]")
     end
   end
 
@@ -41,8 +39,8 @@ describe NexusCli::SchedulesActions do
     end
   end
 
-  describe "create_scheduled_task" do
-    it "should produce a list of types" do
+  describe 'create_scheduled_task' do
+    it 'should produce a list of types' do
       remote = NexusCli::OSSRemote.new(
           'url' => 'http://localhost:8081/nexus',
           'repository' => 'releases',
@@ -50,7 +48,7 @@ describe NexusCli::SchedulesActions do
           'password' => 'admin123'
       )
       remote.create_scheduled_task('name', 'type id', true, 'email address',
-                                   'tomorrow', [{:key => 'key1', :value => 'value1'}]).should eql(true)
+                                   'tomorrow').should eql(true)
     end
   end
 

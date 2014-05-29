@@ -443,10 +443,20 @@ module NexusCli
           say JSON.pretty_generate(JSON.parse(nexus_remote.get_schedules)), :green
         end
 
-        desc "create_scheduled_task", "Creates a scheduled task"
-        def create_scheduled_task(name)
-          if nexus_remote.create_scheduled_task(name, options[:enabled], options[:alert_email],
-                                                options[:properties], options[:schedule])
+        desc 'create_scheduled_task name task_type_id', 'Creates a scheduled task with a given name and of a given type'
+        method_option :enabled,
+                      :type => :boolean,
+                      :default => true,
+                      :desc => "Should the task be enabled from the moment it is created."
+        method_option :alert_email,
+                      :type => :string,
+                      :desc => 'Email address whereto send notifications if task fails.'
+        method_option :schedule,
+                      :type => :string,
+                      :desc => 'The frequency with which the task should run. Options are: manual (default), once, hourly, daily, weekly, monthly'
+        def create_scheduled_task(name, task_type_id)
+          if nexus_remote.create_scheduled_task(name, task_type_id, options[:enabled], options[:alert_email],
+                                                options[:schedule])
             say "A new Scheduled Task named #{name} has been created.", :blue
           end
         end
